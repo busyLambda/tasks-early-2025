@@ -47,10 +47,6 @@ def range_to_dice_notation(min_val: int, max_val: int) -> str:
             total_dice_count += dice_count
             r_mut_clone += dice_count
             dice_sum += dice.value
-            # Break early to not loop the rest of the die in uselessly since no die will match 1 or 0.
-            if r_mut_clone <= 1:
-                debug(f"r_mut_clone at break: {r_mut_clone}")
-                break
 
     offset: int = 0
     if total_dice_count > min_val:
