@@ -50,12 +50,14 @@ def range_to_dice_notation(min_val: int, max_val: int) -> str:
 
     offset: int = 0
     if total_dice_count > min_val:
-        offset = -(total_dice_count+(r-max_val))
+        offset = min_val - total_dice_count
     elif total_dice_count < min_val:
-        if dice_sum+total_dice_count == max_val:
+        if (dice_sum + total_dice_count) == max_val:
             offset = total_dice_count
         else:
-            offset = total_dice_count + (min_val-total_dice_count-1)
+            offset = min_val - total_dice_count
+    else:
+        offset = min_val - total_dice_count
 
     # d = (d)ice
     # c = dice_(c)ount
