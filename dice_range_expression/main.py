@@ -1,6 +1,5 @@
 import enum
-from typing import List
-from typing_extensions import Dict
+from typing import Dict, List
 
 DEBUG: bool = False
 
