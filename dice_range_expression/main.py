@@ -3,6 +3,10 @@ from typing import Dict, List
 
 DEBUG: bool = False
 
+def debug(msg: str):
+    if DEBUG:
+        print(f"DEBUG: {msg}")
+
 with open('./input.txt', 'r') as f:
   input: str = f.read()
 
@@ -30,9 +34,11 @@ def range_to_dice_notation(min_val: int, max_val: int) -> str:
 
     r: int = max_val - min_val
 
+    debug(f"r: {r}")
     # A clone of r meant for statekeeping mutation in order to get the amount of dice we need for the input range.
     r_mut_clone: int = r
     total_dice_count: int = 0
+    dice_sum: int = 0
     for dice in DICE_SET:
         dice_count: int = r_mut_clone // (dice.value-1)
         if dice_count != 0:
@@ -40,15 +46,20 @@ def range_to_dice_notation(min_val: int, max_val: int) -> str:
             output_dice_set[dice] = dice_count
             total_dice_count += dice_count
             r_mut_clone += dice_count
+            dice_sum += dice.value
             # Break early to not loop the rest of the die in uselessly since no die will match 1 or 0.
             if r_mut_clone <= 1:
+                debug(f"r_mut_clone at break: {r_mut_clone}")
                 break
 
     offset: int = 0
     if total_dice_count > min_val:
         offset = -(total_dice_count+(r-max_val))
     elif total_dice_count < min_val:
-        offset = total_dice_count
+        if dice_sum+total_dice_count == max_val:
+            offset = total_dice_count
+        else:
+            offset = total_dice_count + (min_val-total_dice_count-1)
 
     # d = (d)ice
     # c = dice_(c)ount
