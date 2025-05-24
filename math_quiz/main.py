@@ -1,5 +1,3 @@
-print('1.:')
-
 def main() -> None:
     # 1. feladat
     # (R-1)^2+(R-2)^2   = R^2
@@ -22,6 +20,28 @@ def main() -> None:
     #
     # sqrt(100) - sqrt(1) = 10 - 1 = 9
     print("3.: 9")
+
+    # 5. feladat
+    #
+    # A = asztal
+    # T = teknős
+    # C = cica
+    #
+    # 2A + 1T + 1C = 170cm + 1C + 1T 130 + C + 170 + T = 2A + M + T 300 = 2A
+    #
+    # A = 150cm
+    print("5.: 150")
+
+    # 6. feladat
+    #
+    # K = kutya
+    # C = cica
+    # P = patkány
+    #
+    # 10 + 20 + 24 = 2C + 2K + 2P 54 = 2 ∗ (M + K + P)
+    #
+    # M + K + P = 27kg
+    print("6.: 27")
 
 if __name__ == '__main__':
     main()

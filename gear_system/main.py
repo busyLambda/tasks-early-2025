@@ -21,7 +21,7 @@ class Gear:
 
 def pull_lever(lever: list[int], gears: list[Gear]) -> None:
     if len(gears) != len(lever):
-        debug("Lever-gear length mismatch!")
+        debug("Lever-gear length mismatch (should be impossible because we get correct input)!")
 
     for i in range(len(lever)):
         if lever[i] == 1:
@@ -47,14 +47,10 @@ def get_rotations(target: list[int], max_rotations: int = 8) -> str:
     for i in range(side_rotations):
         pull_lever(LEFT_LEVER, gears)
     if gears[1].values[gears[1].index] == center:
-        output: str = ""
-        for a in range(left):
-            output += "left "
-
-        for a in range(right):
-            output += "right "
-
-        return output
+        return " ".join(
+            ["left" for _ in range(left)] +
+            ["right" for _ in range(right)]
+        )
     else:
         return "Megoldhatatlan"
 
