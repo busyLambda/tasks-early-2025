@@ -43,5 +43,15 @@ def main() -> None:
     # M + K + P = 27kg
     print("6.: 27")
 
+    # 7. feladat
+    # E = esély
+    # N = egyik sem nyer
+    #
+    # N = (5/6) * (5/6) = 25/36
+    #
+    # P = (1/6) + (25/36) * P
+    # P = (6/11)
+    print(f"7.: {6/11}")
+
 if __name__ == '__main__':
     main()
