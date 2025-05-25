@@ -1,5 +1,5 @@
 import enum
-from typing import Dict, List
+from typing import Dict
 
 DEBUG: bool = False
 
@@ -19,66 +19,73 @@ class Dice(enum.Enum):
     D3  = 3
     D2  = 2
 
-DICE_SET: List[Dice] = [
-    Dice.D20,
-    Dice.D10,
-    Dice.D8,
-    Dice.D6,
-    Dice.D4,
-    Dice.D3,
-    Dice.D2
-]
+def calculate_offset(min_val: int, max_val: int, total_dice_count: int, dice_sum: int) -> int:
+    """Kiszámolja az offsetet a választott kockák mennyisége és sum-ja illetve a minimum és maximum érték alapján.
 
-def range_to_dice_notation(min_val: int, max_val: int) -> str:
-    output_dice_set: Dict[Dice, int] = {}
+    Args:
+        min_val (int): Az input range minimum értéke. (min_val < max_val)
+        max_val (int): Az input range maximum értéke. (max_val > min_val)
+        total_dice_count (int): Az eddig kiválasztott kockák mennyisége.
+        dice_sum (int): Az eddig kiválasztott kockák értékeinek a sum-ja.
 
-    r: int = max_val - min_val
+    Returns:
+        int: Az adott bemenetnek megfelelő offset érték.
+    """
 
-    debug(f"r: {r}")
-    # A clone of r meant for statekeeping mutation in order to get the amount of dice we need for the input range.
-    r_mut_clone: int = r
-    total_dice_count: int = 0
-    dice_sum: int = 0
-    for dice in DICE_SET:
-        dice_count: int = r_mut_clone // (dice.value-1)
-        if dice_count != 0:
-            r_mut_clone -= dice_count * dice.value
-            output_dice_set[dice] = dice_count
-            total_dice_count += dice_count
-            r_mut_clone += dice_count
-            dice_sum += dice.value
-
-    offset: int = 0
     if total_dice_count > min_val:
-        offset = min_val - total_dice_count
+        return min_val - total_dice_count
     elif total_dice_count < min_val:
         if (dice_sum + total_dice_count) == max_val:
-            offset = total_dice_count
+            return total_dice_count
         else:
-            offset = min_val - total_dice_count
+            return min_val - total_dice_count
     else:
-        offset = min_val - total_dice_count
+        return min_val - total_dice_count
 
-    # d = (d)ice
-    # c = dice_(c)ount
-    output = ""
-    for i in range(len(DICE_SET)-1, -1, -1):
-        dice = DICE_SET[i]
+def range_to_dice_notation(min_val: int, max_val: int) -> str:
+    """Átvált egy bemeneti range (minimum és maximum) értéket a dice-notation változatára a lehető legkevesebb kocka felhasználásával.
+
+    Args:
+        min_val (int): Az input range minimum értéke. (min_val < max_val)
+        max_val (int): Az input range maximum értéke. (max_val > min_val)
+
+    Returns:
+        str: A bemenet dice-notation-ben kifejezve.
+    """
+    output_dice_set: Dict[Dice, int] = {}
+
+    target: int = max_val - min_val
+
+    total_dice_count: int = 0
+    dice_sum: int = 0
+    for dice in Dice:
+        dice_count: int = target // (dice.value-1)
+        if dice_count != 0:
+            output_dice_set[dice] = dice_count
+
+            target -= dice_count * dice.value
+
+            total_dice_count += dice_count
+            target += dice_count
+            dice_sum += dice.value
+
+    offset: int = calculate_offset(min_val, max_val, total_dice_count, dice_sum)
+
+    dice_formatted: list[str] = []
+    for dice in reversed(Dice):
         if dice not in output_dice_set:
             continue
+
         count = output_dice_set[dice]
         if count != 0:
-            output+=f"{count}d{dice.value}"
-            if i != 0:
-                output+="+"
+            dice_formatted.append(f"{count}d{dice.value}")
 
-    output+=str(offset)
-
-    return output
+    return "+".join(dice_formatted)+f"{offset:+}"
 
 for l in input.split("\n")[:-1]:
-    y = l.split(" ")
-    min_val = int(y[0])
-    max_val = int(y[1])
+    parts = l.split(" ")
+
+    min_val = int(parts[0])
+    max_val = int(parts[1])
 
     print(range_to_dice_notation(min_val, max_val))
