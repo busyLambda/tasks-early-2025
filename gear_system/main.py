@@ -4,10 +4,6 @@ def debug(msg: str) -> None:
     if DEBUG:
         print(f"DEBUG: {msg}")
 
-input: str = ""
-with open('./input.txt', 'r') as f:
-  input = f.read()
-
 class Gear:
     def __init__(self) -> None:
         self.index = 2
@@ -20,6 +16,15 @@ class Gear:
             self.index+=1
 
 def pull_lever(lever: list[int], gears: list[Gear]) -> None:
+    """Szimulálja egy kar meghúzását a gears paraméter mutálása által.
+
+    Args:
+        lever (list[int]): Egy kar három egész számból álló listaként. (x ∈ list && 0 <= x <= 1) (len(gears) == len(lever))
+        gears (list[gear]): A fogaskerekek. (len(gears) == len(lever))
+
+    Returns:
+        None: A függvény a gears paramétert mutálja így nincs return érték.
+    """
     if len(gears) != len(lever):
         debug("Lever-gear length mismatch (should be impossible because we get correct input)!")
 
@@ -31,6 +36,17 @@ LEFT_LEVER: list[int] = [1, 1, 0]
 RIGHT_LEVER: list[int] = [0, 1, 1]
 
 def get_rotations(target: list[int], max_rotations: int = 8) -> str:
+    """Úgy forgatja a fogaskerekeket, hogy azok a target paraméter értékét adják ki.
+
+    Args:
+        target (list[int]): Az állapot amelyet szeretnénk elérni.
+        max_rotations (int): A maximális forgatások száma amivel elérhetjük a target-et.
+
+    Returns:
+        str: A target eléréséhez szükséges kar húzások space-el elválasztva vagy a "Megoldhatatlan" érték.
+
+    """
+
     gears: list[Gear] = [
         Gear(),
         Gear(),
@@ -55,6 +71,10 @@ def get_rotations(target: list[int], max_rotations: int = 8) -> str:
         return "Megoldhatatlan"
 
 def main() -> None:
+    input: str = ""
+    with open('./input.txt', 'r') as f:
+      input = f.read()
+
     for line in input.split("\n")[:-1]:
         debug(line)
         if len(line)>9:
