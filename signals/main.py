@@ -8,10 +8,16 @@ def debug(msg: str) -> None:
     if DEBUG:
         print(f"DEBUG: {msg}")
 
-with open('./input.txt', 'r') as f:
-    input = f.read()
-
 def decode_signals(days_input: List[Tuple[List[str], List[str]]]) -> Dict[str, str]:
+    """Dekódolja a jeleket.
+
+    Args:
+        days_input (List[Tuple[list[str], list[str]]]): A bemeneti napok(jelek és események) listája.
+
+    Returning:
+        Dict[str, str]: A jelek az adott dekódolt eseményükhöz párosítva.
+    """
+
     days = []
     codes_to_days: Dict[str, List[int]] = {}
     for i, (codes, events) in enumerate(days_input):
@@ -79,24 +85,19 @@ def decode_signals(days_input: List[Tuple[List[str], List[str]]]) -> Dict[str, s
     return assigned
 
 def main() -> None:
+    input: str
+    with open('./input.txt', 'r') as f:
+        input = f.read()
+
     decoded: Dict[str, str] = decode_signals(ast.literal_eval(input))
 
-    output: str = ""
+    code_to_event_pairs: list[str] = []
 
-    decoded_items = decoded.items()
-    decoded_items_length: int = len(decoded_items)
-    i: int = 0
-    for code, event in decoded_items:
-        output += f"\t\"{code}\": \"{event}\""
-        if i+1 != decoded_items_length:
-            output += ",\n"
-        else:
-            output += "\n"
-
-        i += 1
+    for code, event in decoded.items():
+        code_to_event_pairs.append(f"\t\"{code}\": \"{event}\"")
 
 
-    print(f"{{\n{output}}}")
+    print(f"{{\n{",\n".join(code_to_event_pairs)}\n}}")
 
 if __name__ == '__main__':
     main()
